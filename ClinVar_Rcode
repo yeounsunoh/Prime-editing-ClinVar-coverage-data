@@ -28,3 +28,135 @@ library(Biostrings)
 
 clinvar_total = read.csv("C://Users//tptt1//Downloads//clinvar_used_total.csv")
 
+
+
+amptylist <- c()
+
+
+
+# df<-as.data.frame(amptylist)
+
+# head(df)
+
+# df[,3]<- "chr1"
+
+
+
+#### GGk%< j80l$ l<k! +-30basell9 k0 ll4 l0>j80 ##################################
+
+# GGl j2=l0 lk34l l8 k6 k6l8 CCk l0>ll<m(
+
+for (i in list.files("C://Users//tptt1//Desktop//genome//hg19", pattern = "chromosome")){
+
+  tempchr<- gsub(pattern = "Homo_sapiens.GRCh37.dna.chromosome.", replacement = "", i)
+
+  tempchr<- gsub(pattern = ".fa", replacement = "", tempchr)
+
+  # if (as.numeric(tempchr) < 10){
+
+  #   tempnum = paste0(0,tempchr)
+
+  # }else{
+
+  tempnum = tempchr
+
+  # }
+
+  print(tempnum)
+
+  
+
+  templist<-readDNAStringSet(filepath = paste0("C://Users//tptt1//Desktop//genome//hg19//",i))
+
+  tostring<-toString(templist[[1]])
+
+  df<-as.data.frame(str_locate_all(toString(templist[[1]]),"GG"))
+
+  df[,3]<- tempnum
+
+  df[,4]<-df$start-30
+
+  df[,5]<-df$end+30
+
+  df[,6]<-str_sub(tostring,df$start-30,df$end+30)
+
+  df[,7]<-"GG"
+
+  df <- as.data.frame(df)
+
+  amptylist<-rbind(amptylist,df)
+
+  
+
+}
+
+################## clinvarll lmk
+ j10k&,l pam seq l0>j80 #######################################
+
+#GGl j2=l0 lk34l l8 CCk l0>l k, startk%< endk! -j0l +k! ll m4l<m(
+
+
+
+for (i in list.files("C://Users//tptt1//Desktop//genome//hg19", pattern = "chromosome")){
+
+  tempchr<- gsub(pattern = "Homo_sapiens.GRCh37.dna.chromosome.", replacement = "", i)
+
+  tempchr<- gsub(pattern = ".fa", replacement = "", tempchr)
+
+  subdf = subset(df , df$V3 == tempchr)
+
+  subcline = subset(clinvar_total, clinvar_total$GRCh37Chromosome == tempchr)
+
+  
+
+  tempsub11 = subcline[subcline$GRCh37Location %in% ((subdf$start-11)),]
+
+  tempsub10 = subcline[subcline$GRCh37Location %in% ((subdf$start-10)),]
+
+  tempsub9 = subcline[subcline$GRCh37Location %in% ((subdf$start-9)),]
+
+  tempsub8 = subcline[subcline$GRCh37Location %in% ((subdf$start-8)),]
+
+  tempsub7 = subcline[subcline$GRCh37Location %in% ((subdf$start-7)),]
+
+  tempsub6 = subcline[subcline$GRCh37Location %in% ((subdf$start-6)),]
+
+  tempsub5 = subcline[subcline$GRCh37Location %in% ((subdf$start-5)),]
+
+  tempsub4 = subcline[subcline$GRCh37Location %in% ((subdf$start-4)),]
+
+  tempsub3 = subcline[subcline$GRCh37Location %in% ((subdf$start-3)),]
+
+  tempsub2 = subcline[subcline$GRCh37Location %in% ((subdf$start-2)),]
+
+  tempsub1 = subcline[subcline$GRCh37Location %in% ((subdf$start-1)),]
+
+  
+
+  sub11 = rbind(sub,tempsub11)
+
+  sub10 = rbind(sub,tempsub10)
+
+  sub9 = rbind(sub,tempsub9)
+
+  sub8 = rbind(sub,tempsub8)
+
+  sub7 = rbind(sub,tempsub7)
+
+  sub6 = rbind(sub,tempsub6)
+
+  sub5 = rbind(sub,tempsub5)
+
+  sub4 = rbind(sub,tempsub4)
+
+  sub3 = rbind(sub,tempsub3)
+
+  sub2 = rbind(sub,tempsub2)
+
+  sub1 = rbind(sub,tempsub1)  
+
+  
+
+}
+
+##########################################################################################
