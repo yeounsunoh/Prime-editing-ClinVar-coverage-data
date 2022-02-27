@@ -1,162 +1,77 @@
 rm(list=ls())
-
 #########################
-
 library("seqinr")
-
-#library(BioMedR)
-
-library(pssm)
-
-library(seewave)
-
-#library(msa)
-
 library(stringr)
-
-#library(openPrimeR)
-
-library(primerTree)
-
-library(rvest)
-
 library(tidyverse)
-
 library(Biostrings)
-
-
-
+​
 clinvar_total = read.csv("C://Users//tptt1//Downloads//clinvar_used_total.csv")
-
-
-
+​
 amptylist <- c()
-
-
-
-# df<-as.data.frame(amptylist)
-
-# head(df)
-
-# df[,3]<- "chr1"
-
-
-
-#### GGk%< j80l$ l<k! +-30basell9 k0 ll4 l0>j80 ##################################
-
-# GGl j2=l0 lk34l l8 k6 k6l8 CCk l0>ll<m(
-
+​
+#### GG를 기준으로 +-30base위치 및 서열 찾기 ##################################
+​
+# GG의 경우 상보적인 부분인 CC도 찾아야함
 for (i in list.files("C://Users//tptt1//Desktop//genome//hg19", pattern = "chromosome")){
-
-  tempchr<- gsub(pattern = "Homo_sapiens.GRCh37.dna.chromosome.", replacement = "", i)
-
-  tempchr<- gsub(pattern = ".fa", replacement = "", tempchr)
-
-  # if (as.numeric(tempchr) < 10){
-
-  #   tempnum = paste0(0,tempchr)
-
-  # }else{
-
-  tempnum = tempchr
-
-  # }
-
-  print(tempnum)
-
-  
-
-  templist<-readDNAStringSet(filepath = paste0("C://Users//tptt1//Desktop//genome//hg19//",i))
-
-  tostring<-toString(templist[[1]])
-
-  df<-as.data.frame(str_locate_all(toString(templist[[1]]),"GG"))
-
-  df[,3]<- tempnum
-
-  df[,4]<-df$start-30
-
-  df[,5]<-df$end+30
-
-  df[,6]<-str_sub(tostring,df$start-30,df$end+30)
-
-  df[,7]<-"GG"
-
-  df <- as.data.frame(df)
-
-  amptylist<-rbind(amptylist,df)
-
-  
-
+   tempchr<- gsub(pattern = "Homo_sapiens.GRCh37.dna.chromosome.", replacement = "", i)
+   tempchr<- gsub(pattern = ".fa", replacement = "", tempchr)
+​
+   tempnum = tempchr
+   print(tempnum)
+   
+   templist<-readDNAStringSet(filepath = paste0("C://Users//tptt1//Desktop//genome//hg19//",i))
+   tostring<-toString(templist[[1]])
+   df<-as.data.frame(str_locate_all(toString(templist[[1]]),"GG"))
+   df[,3]<- tempnum
+   df[,4]<-df$start-30
+   df[,5]<-df$end+30
+   df[,6]<-str_sub(tostring,df$start-30,df$end+30)
+   df[,7]<-"GG"
+   df <- as.data.frame(df)
+   amptylist<-rbind(amptylist,df)
+ 
 }
-
-################## clinvarll lmk
- j10k&,l pam seq l0>j80 #######################################
-
-#GGl j2=l0 lk34l l8 CCk l0>l k, startk%< endk! -j0l +k! ll m4l<m(
-
-
-
+​
+df <- amptylist
+rm(amptylist)
+################## clinvar에서 원하는 거리의 pam seq 찾기 #######################################
+#GG의 경우 상보적인 CC도 찾을 때, start를 end로 -값을 +로 수정해야함
+​
+for (i in 1:11){
+ assign(paste0("sub",i), value = c())
+}
+​
 for (i in list.files("C://Users//tptt1//Desktop//genome//hg19", pattern = "chromosome")){
-
-  tempchr<- gsub(pattern = "Homo_sapiens.GRCh37.dna.chromosome.", replacement = "", i)
-
-  tempchr<- gsub(pattern = ".fa", replacement = "", tempchr)
-
-  subdf = subset(df , df$V3 == tempchr)
-
-  subcline = subset(clinvar_total, clinvar_total$GRCh37Chromosome == tempchr)
-
-  
-
-  tempsub11 = subcline[subcline$GRCh37Location %in% ((subdf$start-11)),]
-
-  tempsub10 = subcline[subcline$GRCh37Location %in% ((subdf$start-10)),]
-
-  tempsub9 = subcline[subcline$GRCh37Location %in% ((subdf$start-9)),]
-
-  tempsub8 = subcline[subcline$GRCh37Location %in% ((subdf$start-8)),]
-
-  tempsub7 = subcline[subcline$GRCh37Location %in% ((subdf$start-7)),]
-
-  tempsub6 = subcline[subcline$GRCh37Location %in% ((subdf$start-6)),]
-
-  tempsub5 = subcline[subcline$GRCh37Location %in% ((subdf$start-5)),]
-
-  tempsub4 = subcline[subcline$GRCh37Location %in% ((subdf$start-4)),]
-
-  tempsub3 = subcline[subcline$GRCh37Location %in% ((subdf$start-3)),]
-
-  tempsub2 = subcline[subcline$GRCh37Location %in% ((subdf$start-2)),]
-
-  tempsub1 = subcline[subcline$GRCh37Location %in% ((subdf$start-1)),]
-
-  
-
-  sub11 = rbind(sub,tempsub11)
-
-  sub10 = rbind(sub,tempsub10)
-
-  sub9 = rbind(sub,tempsub9)
-
-  sub8 = rbind(sub,tempsub8)
-
-  sub7 = rbind(sub,tempsub7)
-
-  sub6 = rbind(sub,tempsub6)
-
-  sub5 = rbind(sub,tempsub5)
-
-  sub4 = rbind(sub,tempsub4)
-
-  sub3 = rbind(sub,tempsub3)
-
-  sub2 = rbind(sub,tempsub2)
-
-  sub1 = rbind(sub,tempsub1)  
-
-  
-
+ tempchr<- gsub(pattern = "Homo_sapiens.GRCh37.dna.chromosome.", replacement = "", i)
+ tempchr<- gsub(pattern = ".fa", replacement = "", tempchr)
+ subdf = subset(df , df$V3 == tempchr)
+ subcline = subset(clinvar_total, clinvar_total$GRCh37Chromosome == tempchr)
+ 
+ tempsub11 = subcline[subcline$GRCh37Location %in% ((subdf$start-11)),]
+ tempsub10 = subcline[subcline$GRCh37Location %in% ((subdf$start-10)),]
+ tempsub9 = subcline[subcline$GRCh37Location %in% ((subdf$start-9)),]
+ tempsub8 = subcline[subcline$GRCh37Location %in% ((subdf$start-8)),]
+ tempsub7 = subcline[subcline$GRCh37Location %in% ((subdf$start-7)),]
+ tempsub6 = subcline[subcline$GRCh37Location %in% ((subdf$start-6)),]
+ tempsub5 = subcline[subcline$GRCh37Location %in% ((subdf$start-5)),]
+ tempsub4 = subcline[subcline$GRCh37Location %in% ((subdf$start-4)),]
+ tempsub3 = subcline[subcline$GRCh37Location %in% ((subdf$start-3)),]
+ tempsub2 = subcline[subcline$GRCh37Location %in% ((subdf$start-2)),]
+ tempsub1 = subcline[subcline$GRCh37Location %in% ((subdf$start-1)),]
+​
+ 
 }
-
-##########################################################################################
+​
+############## 합산 ############################################################
+​
+for (j in 1:11){
+ subname <- paste0("sub",rep(1:11))[j]
+ for (k in 1:j){
+   tmp_text <- paste0(subname,"<-","rbind(",subname,", tempsub",k,")")
+   print(tmp_text)
+   eval(parse(text = tmp_text))
+ }
+}
+# 이 때, clinvar가 같은 포지션에서 여러 질병을 표현하는 경우가 있어, 분석 방법을 선택해야함
+​
+################################################################################
